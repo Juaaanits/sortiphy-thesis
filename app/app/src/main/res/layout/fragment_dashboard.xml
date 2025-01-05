@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/dashboard_top_container"
@@ -21,7 +21,10 @@
             android:layout_height="wrap_content"
             android:gravity="bottom|fill_horizontal"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:paddingLeft="16dp"
+            android:paddingTop="0dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp">
 
             <LinearLayout
                 android:id="@+id/greetings_container"
@@ -59,8 +62,71 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/bin_dashboard_levels_pager"
             android:layout_width="match_parent"
-            android:layout_height="229dp" />
+            android:layout_height="184dp">
+
+        </androidx.viewpager2.widget.ViewPager2>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/indicator_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/bin_page_indicator"
+                android:layout_width="36dp"
+                android:layout_height="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="6dp"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="6dp"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="6dp"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.tabs.TabLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/current_fill_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Current Fill Levels"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Close Bin"
+            android:background="@drawable/round_button_white"
+            android:layout_marginLeft="96dp"
+            android:layout_marginRight="96dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="8dp"
+            />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
