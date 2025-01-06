@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/daily_report_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp"
+    android:layout_weight="1"
+    app:cardBackgroundColor="#0D21A0"
+
+    app:cardCornerRadius="16dp">
+
+    <LinearLayout
+        android:id="@+id/card_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/daily_report_card_row_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/plastic_stat_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button_white">
+
+                <Button
+                    android:id="@+id/plastic_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_button_white"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/paper_stat_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button_white">
+
+                <Button
+                    android:id="@+id/paper_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_button_white"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/glass_metal_stat_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button_white">
+
+                <Button
+                    android:id="@+id/glass_metal_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_button_white"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/non_rec_plastic_stat_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button_white">
+
+                <Button
+                    android:id="@+id/non_rec_plastic_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_button_white"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/special_stat_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button_white">
+
+                <Button
+                    android:id="@+id/special_stat_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_button_white"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
