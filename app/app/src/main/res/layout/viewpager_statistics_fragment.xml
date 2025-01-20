@@ -123,6 +123,12 @@
             android:layout_height="match_parent"
             android:layout_weight="5"
             android:background="#ECC442">
+            <include
+                android:id="@+id/chart_view"
+                layout="@layout/frequency_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

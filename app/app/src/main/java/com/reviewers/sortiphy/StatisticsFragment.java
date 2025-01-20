@@ -38,8 +38,17 @@ public class StatisticsFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(TabLayout.Tab tab, int position) {
-                // Configure the tab, e.g., set text or icon
-                tab.setText("Tab " + (position + 1));
+                switch (position) {
+                    case 0:
+                        tab.setText("Today");
+                        break;
+                    case 1:
+                        tab.setText("This Week");
+                        break;
+                    case 2:
+                        tab.setText("All Time");
+                        break;
+                }
             }
         }).attach();
 

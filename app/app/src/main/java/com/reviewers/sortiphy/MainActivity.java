@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
         } else if (item.getItemId() ==  R.id.nav_statistics) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StatisticsFragment()).commit();
-        } else if (item.getItemId() ==  R.id.nav_settings) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-        } else if (item.getItemId() ==  R.id.nav_logout) {
+        } /* else if (item.getItemId() ==  R.id.nav_settings) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit(); // no settings for now
+        } */else if (item.getItemId() ==  R.id.nav_logout) {
             startActivity(new Intent(MainActivity.this, LoginScreen.class));
             finish();
         }
