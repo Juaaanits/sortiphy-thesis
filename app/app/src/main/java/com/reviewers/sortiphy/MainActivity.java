@@ -1,6 +1,7 @@
 package com.reviewers.sortiphy;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -21,10 +22,20 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+
     private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean loginCheck = sharedPreferences.getBoolean("isLoggedIn", false);
+
+        if (!loginCheck) {
+            startActivity(new Intent(MainActivity.this, LoginScreen.class));
+            finish();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -56,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } /* else if (item.getItemId() ==  R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit(); // no settings for now
         } */else if (item.getItemId() ==  R.id.nav_logout) {
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("isLoggedIn");
+            editor.apply();
+
             startActivity(new Intent(MainActivity.this, LoginScreen.class));
             finish();
         }
