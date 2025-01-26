@@ -66,22 +66,21 @@ public class StatisticsPageViewFragment extends Fragment {
         pieChart.invalidate();
         pieChart.getLegend().setEnabled(false);
 
-        View frequencyView = (ViewGroup) inflater.inflate(R.layout.frequency_chart, container, false);
-
-        lineChart = frequencyView.findViewById(R.id.line_chart);
+        lineChart = rootView.findViewById(R.id.line_chart);
 
         Description description = new Description();
-        description.setText("Students Record");
+        description.setText("Per Hour");
         description.setPosition(150f,15f);
         lineChart.setDescription(description);
         lineChart.getAxisRight().setDrawLabels(false);
 
-        xValues = Arrays.asList("Nadun","Kamal","Jhon","Jerry");
+        xValues = Arrays.asList("6AM", "8AM", "10AM", "12AM",
+                "2PM", "4PM", "6PM" );
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xValues));
-        xAxis.setLabelCount(4);
+        xAxis.setLabelCount(7);
         xAxis.setGranularity(1f);
 
         YAxis yAxis = lineChart.getAxisLeft();
@@ -92,22 +91,29 @@ public class StatisticsPageViewFragment extends Fragment {
         yAxis.setLabelCount(10);
 
 
-        List<Entry> entries1 = new ArrayList<>();
+        List<Entry> entries1 = new ArrayList<>(); // MAKE A HELPER FUNCTION FOR THIS PLEASE
         entries1.add(new Entry(0, 60f));
         entries1.add(new Entry(1, 70f));
         entries1.add(new Entry(2, 85f));
         entries1.add(new Entry(3, 95f));
+        entries1.add(new Entry(4, 60f));
+        entries1.add(new Entry(5, 70f));
+        entries1.add(new Entry(6, 78f));
 
         List<Entry> entries2 = new ArrayList<>();
-        entries2.add(new Entry(0, 50f));
-        entries2.add(new Entry(1, 85f));
-        entries2.add(new Entry(2, 65f));
-        entries2.add(new Entry(3, 80f));
+        entries2.add(new Entry(0, 20f));
+        entries2.add(new Entry(1, 34f));
+        entries2.add(new Entry(2, 26f));
+        entries2.add(new Entry(3, 74f));
+        entries2.add(new Entry(4, 23f));
+        entries2.add(new Entry(5, 70f));
+        entries2.add(new Entry(6, 65f));
 
-        LineDataSet dataSet1 = new LineDataSet(entries1, "Maths");
+
+        LineDataSet dataSet1 = new LineDataSet(entries1, "Paper");
         dataSet1.setColor(Color.BLUE);
 
-        LineDataSet dataSet2 = new LineDataSet(entries2, "Science");
+        LineDataSet dataSet2 = new LineDataSet(entries2, "Plastic");
         dataSet2.setColor(Color.RED);
 
         LineData lineData = new LineData(dataSet1, dataSet2);
