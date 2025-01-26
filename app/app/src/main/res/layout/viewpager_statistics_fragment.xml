@@ -64,7 +64,13 @@
                     android:id="@+id/graph_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="4">
+                    android:layout_weight="4"
+                    android:padding="16dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -123,12 +129,12 @@
             android:layout_height="match_parent"
             android:layout_weight="5"
             android:background="#ECC442">
+
             <include
                 android:id="@+id/chart_view"
                 layout="@layout/frequency_chart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
