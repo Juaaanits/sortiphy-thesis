@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "385952666011",
+    "project_id": "sortiphy",
+    "storage_bucket": "sortiphy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385952666011:android:f6c17b8a7f105a2b82113e",
+        "android_client_info": {
+          "package_name": "com.reviewers.sortiphy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCraxOejDO7bijM0dcI-kmHTnx7c_1zk7I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

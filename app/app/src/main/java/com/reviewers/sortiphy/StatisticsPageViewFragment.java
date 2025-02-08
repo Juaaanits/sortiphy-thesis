@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,9 +32,11 @@ public class StatisticsPageViewFragment extends Fragment {
     private PieChart pieChart;
     private LineChart lineChart;
     private List<String> xValues;
+    private FirebaseFirestore db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = (ViewGroup) inflater.inflate(R.layout.viewpager_statistics_fragment, container, false);
         pieChart = rootView.findViewById(R.id.pie_chart);
 
