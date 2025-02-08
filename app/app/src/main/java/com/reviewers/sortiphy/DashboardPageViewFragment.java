@@ -14,3 +14,4 @@ public class DashboardPageViewFragment extends Fragment {
         return (ViewGroup) inflater.inflate(R.layout.viewpager_item, container, false);
     }
 }
+// hi!
