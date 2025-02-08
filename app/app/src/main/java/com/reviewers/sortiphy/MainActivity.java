@@ -61,7 +61,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView userProfileImage = headerView.findViewById(R.id.profile_picture);
 
         db.collection("users").document(userId)
-                .get().addOnSuccessListener(documentSnapshot -> {
+                .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore", "Listen failed.", error);
+                        return;
+                    }
                     if (documentSnapshot.exists()) {
                         String username = documentSnapshot.getString("username");
                         String position = documentSnapshot.getString("position");
@@ -72,11 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         // add image loading here when you get it
                     }
-                }).addOnFailureListener(e -> {
-                    Log.e("Firestore", "Failed in getting user data", e);
         });
-
-
 
         navigationView.setNavigationItemSelectedListener(this);
 
