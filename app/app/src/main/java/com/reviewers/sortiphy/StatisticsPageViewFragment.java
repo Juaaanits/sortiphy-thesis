@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -29,9 +30,12 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class StatisticsPageViewFragment extends Fragment {
 
@@ -39,13 +43,61 @@ public class StatisticsPageViewFragment extends Fragment {
     private LineChart lineChart;
     private List<String> xValues;
     private FirebaseFirestore db;
-    String userId = "dailyTrashStatistics"; //replace this when authentication system is complete!
+    private int page;
+    String userId; //replace this when authentication system is complete!
+
+    public static StatisticsPageViewFragment newInstance(int page) {
+        StatisticsPageViewFragment fragment = new StatisticsPageViewFragment();
+        Bundle args = new Bundle();
+        args.putInt("INPUT", page);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            page = getArguments().getInt("INPUT", 0);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+
         db = FirebaseFirestore.getInstance();
         View rootView = (ViewGroup) inflater.inflate(R.layout.viewpager_statistics_fragment, container, false);
         pieChart = rootView.findViewById(R.id.pie_chart);
+        TextView date = rootView.findViewById(R.id.date);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
+
+        switch (page) {
+            case 0:
+                date.setText(dateFormat.format(calendar.getTime()));
+                userId = "dailyTrashStatistics";
+                break;
+            case 1:
+                Calendar calendarOne = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                calendarOne.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                date.setText(dateFormat.format(calendar.getTime()) + " - " + dateFormat.format(calendarOne.getTime()));
+                userId = "weeklyTrashStatistics";
+                break;
+            case 2:
+                dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+                date.setText(dateFormat.format(calendar.getTime()));
+                userId = "monthlyTrashStatistics";
+                break;
+            default:
+                date.setText(dateFormat.format(calendar.getTime()));
+                userId = "dailyTrashStatistics";
+                break;
+        }
 
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#FF6347"));  // Tomato Red
@@ -55,6 +107,8 @@ public class StatisticsPageViewFragment extends Fragment {
         colors.add(Color.parseColor("#8A2BE2"));  // Blue Violet
 
         ArrayList<PieEntry> entries = new ArrayList<>();
+
+
 
         db.collection("statistics").document(userId)
                 .addSnapshotListener((documentSnapshot, error) -> {
@@ -68,6 +122,14 @@ public class StatisticsPageViewFragment extends Fragment {
                         long categoryThree = documentSnapshot.getLong("categoryThreeCount");
                         long categoryFour = documentSnapshot.getLong("categoryFourCount");
                         long categoryFive = documentSnapshot.getLong("categoryFiveCount");
+
+                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour + categoryFive;
+
+                        setupGarbageInfo(rootView, R.id.type_one, "Paper", categoryOne, totalValue, 0, colors);
+                        setupGarbageInfo(rootView, R.id.type_two, "Plastic", categoryTwo, totalValue, 1, colors);
+                        setupGarbageInfo(rootView, R.id.type_three, "Glass", categoryThree, totalValue, 2, colors);
+                        setupGarbageInfo(rootView, R.id.type_four, "Metal", categoryFour, totalValue, 3, colors);
+                        setupGarbageInfo(rootView, R.id.type_five, "Organic", categoryFive, totalValue, 4, colors);
 
                         entries.clear();
                         entries.add(new PieEntry(categoryOne, ""));
@@ -90,14 +152,6 @@ public class StatisticsPageViewFragment extends Fragment {
                         pieChart.animateY(1000);
                         pieChart.invalidate();
                         pieChart.getLegend().setEnabled(false);
-
-                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour + categoryFive;
-
-                        setupGarbageInfo(rootView, R.id.type_one, "Paper", categoryOne, totalValue, 0, colors);
-                        setupGarbageInfo(rootView, R.id.type_two, "Plastic", categoryTwo, totalValue, 1, colors);
-                        setupGarbageInfo(rootView, R.id.type_three, "Glass", categoryThree, totalValue, 2, colors);
-                        setupGarbageInfo(rootView, R.id.type_four, "Metal", categoryFour, totalValue, 3, colors);
-                        setupGarbageInfo(rootView, R.id.type_five, "Organic", categoryFive, totalValue, 4, colors);
                     }
         });
 

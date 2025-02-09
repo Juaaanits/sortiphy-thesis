@@ -51,7 +51,7 @@ public class StatisticsFragment extends Fragment {
                         tab.setText("This Week");
                         break;
                     case 2:
-                        tab.setText("All Time");
+                        tab.setText("This Month");
                         break;
                 }
             }
@@ -67,7 +67,7 @@ public class StatisticsFragment extends Fragment {
         @NotNull
         @Override
         public Fragment createFragment(int position) {
-            return new StatisticsPageViewFragment();
+            return new StatisticsPageViewFragment().newInstance(position);
         } // This part is responsible for deciding which class will show what fragment
 
         @Override
