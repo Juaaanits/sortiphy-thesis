@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/plastic_stat_container"
+                android:id="@+id/type_one_stat_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -34,7 +34,7 @@
                 android:background="@drawable/round_button_white">
 
                 <Button
-                    android:id="@+id/plastic_button"
+                    android:id="@+id/type_one_button"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/round_button_white"
@@ -46,7 +46,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/paper_stat_container"
+                android:id="@+id/type_two_stat_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -54,28 +54,7 @@
                 android:background="@drawable/round_button_white">
 
                 <Button
-                    android:id="@+id/paper_button"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/round_button_white"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/glass_metal_stat_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="8dp"
-                android:background="@drawable/round_button_white">
-
-                <Button
-                    android:id="@+id/glass_metal_button"
+                    android:id="@+id/type_two_button"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/round_button_white"
@@ -88,7 +67,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/non_rec_plastic_stat_container"
+                android:id="@+id/type_three_stat_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -96,7 +75,7 @@
                 android:background="@drawable/round_button_white">
 
                 <Button
-                    android:id="@+id/non_rec_plastic_button"
+                    android:id="@+id/type_three_button"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/round_button_white"
@@ -109,7 +88,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/special_stat_container"
+                android:id="@+id/type_four_plastic_stat_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -117,7 +96,28 @@
                 android:background="@drawable/round_button_white">
 
                 <Button
-                    android:id="@+id/special_stat_button"
+                    android:id="@+id/type_four_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/round_button_white"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/type_five_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button_white">
+
+                <Button
+                    android:id="@+id/type_five_button"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/round_button_white"
@@ -136,7 +136,7 @@
             android:layout_weight="10">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"

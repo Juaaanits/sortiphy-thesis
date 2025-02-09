@@ -63,6 +63,12 @@ public class DashboardFragment extends Fragment {
             }
         }).attach();
 
+        View dailyStats = rootView.findViewById(R.id.daily_card);
+        View weeklyStats = rootView.findViewById(R.id.weekly_card);
+
+        setupCards("dailyTrashStatistics", dailyStats);
+        setupCards("weeklyTrashStatistics", weeklyStats);
+
         return rootView;
     }
 
@@ -81,4 +87,48 @@ public class DashboardFragment extends Fragment {
             return NUM_PAGES;
         }
     }
+
+    private void setupCards (String statisticsId, View stats) {
+        db.collection("statistics").document(statisticsId)
+                .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore", "Listen failed.", error);
+                        return;
+                    }
+                    if (documentSnapshot.exists()) {
+                        long categoryOne = documentSnapshot.getLong("categoryOneCount");
+                        long categoryTwo = documentSnapshot.getLong("categoryTwoCount");
+                        long categoryThree = documentSnapshot.getLong("categoryThreeCount");
+                        long categoryFour = documentSnapshot.getLong("categoryFourCount");
+                        long categoryFive = documentSnapshot.getLong("categoryFiveCount");
+
+                        String categoryOneName = documentSnapshot.getString("categoryNameOne");
+                        String categoryTwoName = documentSnapshot.getString("categoryNameTwo");
+                        String categoryThreeName = documentSnapshot.getString("categoryNameThree");
+                        String categoryFourName = documentSnapshot.getString("categoryNameFour");
+                        String categoryFiveName = documentSnapshot.getString("categoryNameFive");
+
+                        String type = documentSnapshot.getString("type");
+
+                        TextView textOne = stats.findViewById(R.id.type_one_button);
+                        TextView textTwo = stats.findViewById(R.id.type_two_button);
+                        TextView textThree = stats.findViewById(R.id.type_three_button);
+                        TextView textFour = stats.findViewById(R.id.type_four_button);
+                        TextView textFive = stats.findViewById(R.id.type_five_button);
+                        TextView cardType = stats.findViewById(R.id.card_name);
+
+                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour + categoryFive;
+
+                        textOne.setText(String.format("%.2f%%", (categoryOne * 100.0) / totalValue) + " " +  categoryOneName);
+                        textTwo.setText(String.format("%.2f%%", (categoryTwo * 100.0) / totalValue) + " " +  categoryTwoName);
+                        textThree.setText(String.format("%.2f%%", (categoryThree * 100.0) / totalValue) + " " +  categoryThreeName);
+                        textFour.setText(String.format("%.2f%%", (categoryFour * 100.0) / totalValue) + " " +  categoryFourName);
+                        textFive.setText(String.format("%.2f%%", (categoryFive * 100.0) / totalValue) + " " + categoryFiveName);
+
+                        cardType.setText(type + " Stats");
+                    }
+                });
+    }
 }
+
+
