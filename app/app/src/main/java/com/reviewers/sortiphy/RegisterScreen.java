@@ -53,9 +53,15 @@ public class RegisterScreen extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
         String username = usernameEditText.getText().toString().trim();
         String position = positionEditText.getText().toString().trim();
+        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty() || username.isEmpty() || position.isEmpty()) {
             Toast.makeText(RegisterScreen.this, "All fields are required!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(RegisterScreen.this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
             return;
         }
 
