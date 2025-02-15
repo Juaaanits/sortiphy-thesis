@@ -80,11 +80,11 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/username_field"
+            android:id="@+id/email_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Username"
+            android:hint="Email"
             android:inputType="text" />
 
         <EditText
@@ -138,8 +138,9 @@
             android:id="@+id/help_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" Contact your local administration"
-            android:textSize="8sp" />
+            android:text=" Make an account here."
+            android:textSize="8sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

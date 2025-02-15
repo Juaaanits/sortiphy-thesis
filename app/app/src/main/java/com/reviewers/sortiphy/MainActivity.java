@@ -1,5 +1,6 @@
 package com.reviewers.sortiphy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         boolean loginCheck = sharedPreferences.getBoolean("isLoggedIn", false);
+        userId = sharedPreferences.getString("USER_ID", null);
 
         if (!loginCheck) {
             startActivity(new Intent(MainActivity.this, LoginScreen.class));
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove("isLoggedIn");
+            editor.remove("USER_ID");
             editor.apply();
 
             startActivity(new Intent(MainActivity.this, LoginScreen.class));

@@ -1,5 +1,7 @@
 package com.reviewers.sortiphy;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,13 +31,19 @@ public class DashboardFragment extends Fragment {
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
     private TabLayout tabLayout;
-    String userId = "SqkFypben8amVK4o4RED"; //replace this when authentication system is complete!
+    private String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         View rootView = inflater.inflate(R.layout.fragment_dashboard,container,false);
         TextView usernameDisplay = rootView.findViewById(R.id.greetings_text);
+
+        if (getActivity() != null) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            userId = sharedPreferences.getString("USER_ID", null);
+        }
+
 
         db.collection("users").document(userId)
                 .addSnapshotListener((documentSnapshot, error) -> {

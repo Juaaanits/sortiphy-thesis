@@ -1,5 +1,6 @@
 package com.reviewers.sortiphy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +24,7 @@ public class LoginScreen extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
+    private TextView registerText;
     private Button loginButton, registerButton;
 
     @Override
@@ -40,8 +43,16 @@ public class LoginScreen extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         loginButton = (Button) findViewById(R.id.login_confirm_button);
-        emailEditText = findViewById(R.id.username_field);
+        emailEditText = findViewById(R.id.email_field);
         passwordEditText = findViewById(R.id.password_field);
+        registerText = findViewById(R.id.help_action);
+
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginScreen.this, RegisterScreen.class));
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +73,7 @@ public class LoginScreen extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         editor.putBoolean("isLoggedIn", true);
+                        editor.putString("USER_ID", user.getUid());
                         editor.apply();
 
                         startActivity(new Intent(LoginScreen.this, MainActivity.class));

@@ -73,7 +73,9 @@ public class StatisticsPageViewFragment extends Fragment {
         TextView date = rootView.findViewById(R.id.date);
 
         Calendar calendar = Calendar.getInstance();
+        Calendar calendarOne = Calendar.getInstance();
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendarOne.setFirstDayOfWeek(Calendar.MONDAY);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
 
         switch (page) {
@@ -82,7 +84,6 @@ public class StatisticsPageViewFragment extends Fragment {
                 userId = "dailyTrashStatistics";
                 break;
             case 1:
-                Calendar calendarOne = Calendar.getInstance();
                 calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                 calendarOne.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                 date.setText(dateFormat.format(calendar.getTime()) + " - " + dateFormat.format(calendarOne.getTime()));
