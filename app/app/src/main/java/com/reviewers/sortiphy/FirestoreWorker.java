@@ -46,7 +46,8 @@ public class FirestoreWorker extends Worker {
                             Double value = snapshot.getDouble("fillLevel");
                             String type = snapshot.getString("className");
                             if (value != null && value >= THRESHOLD) {
-                                sendNotification("Trash Bag almost Full!", "The " + type + " trash bag is " + value + "% full! Please replace now!");
+                                sendNotification("Trash Bag almost Full!", "The " + type + " trash bag is " + value + "% full! Please replace now!"
+                                        , type + " level currently at " + value + "%.");
                             }
                         }
                     });
@@ -55,7 +56,7 @@ public class FirestoreWorker extends Worker {
         return Result.success();
     }
 
-    private void sendNotification(String title, String message) {
+    private void sendNotification(String title, String message, String notificationMessage) {
         NotificationManager notificationManager = (NotificationManager) getApplicationContext()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -91,7 +92,7 @@ public class FirestoreWorker extends Worker {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show()
         ); //for debugging*/
 
-        saveNotificationHistory(title, message);
+        saveNotificationHistory(title, notificationMessage);
     }
 
     private void saveNotificationHistory(String title, String message) {
@@ -100,7 +101,9 @@ public class FirestoreWorker extends Worker {
 
         String timestamp = new SimpleDateFormat("MM-dd-yy | hh:mm:ss a", Locale.getDefault()).format(new Date());
         String entry = timestamp + "###" + title + "###" + message;
-        Set<String> history = prefs.getStringSet("history", new LinkedHashSet<>());
+
+        Set<String> historySet = prefs.getStringSet("history", new LinkedHashSet<>());
+        Set<String> history = new LinkedHashSet<>(historySet);
 
         if (history.size() >= 50) {
             history.remove(history.iterator().next());
