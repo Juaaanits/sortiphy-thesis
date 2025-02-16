@@ -3,6 +3,7 @@ package com.reviewers.sortiphy;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +15,12 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Set;
 
 public class FirestoreWorker extends Worker {
 
@@ -76,12 +83,31 @@ public class FirestoreWorker extends Worker {
             );
             notificationManager.createNotificationChannel(channel);
         }
-        // Use a unique ID for each notification (to avoid overwriting)
+
         int notificationId = (int) System.currentTimeMillis();
         notificationManager.notify(notificationId, builder.build());
 
         /*new Handler(Looper.getMainLooper()).post(() ->
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show()
-        ); for debugging*/
+        ); //for debugging*/
+
+        saveNotificationHistory(title, message);
+    }
+
+    private void saveNotificationHistory(String title, String message) {
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("NotificationHistory", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String timestamp = new SimpleDateFormat("MM-dd-yy | hh:mm:ss a", Locale.getDefault()).format(new Date());
+        String entry = timestamp + "###" + title + "###" + message;
+        Set<String> history = prefs.getStringSet("history", new LinkedHashSet<>());
+
+        if (history.size() >= 50) {
+            history.remove(history.iterator().next());
+        }
+        history.add(entry);
+
+        editor.putStringSet("history", history);
+        editor.apply();
     }
 }

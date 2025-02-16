@@ -183,6 +183,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ExistingWorkPolicy.REPLACE,
                 workRequest
         );
-        new Handler(Looper.getMainLooper()).postDelayed(this::scheduleFirestoreWorkerDebug, 5000);
+        new Handler(Looper.getMainLooper()).postDelayed(this::scheduleFirestoreWorkerDebug, 10000);
     }
 }
