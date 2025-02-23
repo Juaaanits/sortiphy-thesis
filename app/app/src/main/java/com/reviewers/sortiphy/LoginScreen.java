@@ -24,8 +24,9 @@ public class LoginScreen extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
-    private TextView registerText;
+    private TextView registerText, forgotPassword;
     private Button loginButton, registerButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,35 @@ public class LoginScreen extends AppCompatActivity {
         emailEditText = findViewById(R.id.email_field);
         passwordEditText = findViewById(R.id.password_field);
         registerText = findViewById(R.id.help_action);
+        forgotPassword = findViewById(R.id.forgot_password);
+
 
         registerText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginScreen.this, RegisterScreen.class));
+            }
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailEditText.getText().toString().trim();
+
+                if (email.isEmpty()) {
+                    Toast.makeText(LoginScreen.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mAuth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginScreen.this, "Password reset email sent. Check your inbox.", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(LoginScreen.this, "Failed to send reset email", Toast.LENGTH_LONG).show();
+                                Log.e("FirebaseAuth", "Password reset failed", task.getException());
+                            }
+                        });
             }
         });
 
