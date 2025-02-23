@@ -22,7 +22,7 @@
             android:layout_height="150dp"
             android:background="@android:color/darker_gray"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/furina_icon"
+            app:srcCompat="@drawable/baseline_person_24"
             />
 
         <Button

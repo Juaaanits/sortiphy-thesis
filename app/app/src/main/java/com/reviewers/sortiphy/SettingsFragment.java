@@ -60,7 +60,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        
+
         db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("USER_ID", null);
