@@ -5,14 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SETTINGS FRAGMENT"
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@android:color/darker_gray"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/furina_icon"
+            />
+
+        <Button
+            android:id="@+id/btnGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose from Gallery" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

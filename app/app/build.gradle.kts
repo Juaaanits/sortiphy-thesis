@@ -40,6 +40,8 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:22.3.1")
     implementation ("androidx.work:work-runtime:2.8.1")
     implementation ("androidx.core:core-ktx:1.12.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
