@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +60,23 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        
         db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userId = sharedPreferences.getString("USER_ID", null);
+
+        db.collection("users").document(userId)
+                .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore", "Listen failed.", error);
+                        return;
+                    }
+                    if (documentSnapshot.exists()) {
+                        String profilePicture = documentSnapshot.getString("displayPhoto");
+
+                        Glide.with(getContext()).load(profilePicture).into(profileImageView);
+                    }
+                });
 
         requestPermissions();
 

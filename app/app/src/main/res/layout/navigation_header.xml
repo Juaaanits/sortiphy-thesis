@@ -18,7 +18,10 @@
             android:id="@+id/profile_picture"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/furina_icon" />
+            android:background="@android:color/darker_gray"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/furina_icon"
+            />
 
         <LinearLayout
             android:id="@+id/user_info_display"

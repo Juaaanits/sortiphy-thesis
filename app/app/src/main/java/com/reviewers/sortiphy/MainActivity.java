@@ -36,6 +36,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -95,12 +96,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (documentSnapshot.exists()) {
                         String username = documentSnapshot.getString("username");
                         String position = documentSnapshot.getString("position");
-                        String profilePicture = documentSnapshot.getString("profilePicture");
+                        String profilePicture = documentSnapshot.getString("displayPhoto");
 
                         userNameText.setText(username);
                         userDescriptionDisplay.setText(position);
 
-                        // add image loading here when you get it
+                        // Load image using Glide if the profile picture exists
+                        if (profilePicture != null && !profilePicture.isEmpty()) {
+                            Glide.with(headerView.getContext())
+                                    .load(profilePicture)
+                                    //.placeholder(R.drawable.default_profile) // Optional: Placeholder image
+                                    //.error(R.drawable.error_profile) // Optional: Error image if URL fails
+                                    .into(userProfileImage);
+                        } else {
+                           // userProfileImage.setImageResource(R.drawable.default_profile);
+                        }
                     }
         });
 
