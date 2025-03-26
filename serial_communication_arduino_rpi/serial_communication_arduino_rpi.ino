@@ -1,8 +1,6 @@
-/*
+/*#include <Servo.h>
 
-#include <Servo.h>
-
-// Ultrasonic sensor for object detection
+//    Ultrasonic sensor for object detection
 const int trigPin = 4;
 const int echoPin = 5;
 
@@ -14,10 +12,8 @@ const int echoBin = 9;
 const int stepPin = 3;
 const int dirPin = 2;
 
-*/
-
 // Pins for platform control
-/*
+
 #define AIN1 6
 #define AIN2 7
 #define PWMA 5
@@ -25,9 +21,10 @@ const int dirPin = 2;
 #define BIN2 11
 #define PWMB 9
 
-*/
+
 
 // Stepper motor for compression
+
 #define COMPRESSOR_STEP_1 3
 #define COMPRESSOR_DIR_1 2
 
@@ -47,7 +44,7 @@ const int dirPin = 2;
 
 void setup() {
 
-  /*
+  
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   pinMode(trigBin, OUTPUT);
@@ -61,7 +58,7 @@ void setup() {
   pinMode(BIN2, OUTPUT);
   pinMode(PWMB, OUTPUT);
 
-  */
+  
   pinMode(COMPRESSOR_STEP_1, OUTPUT);
   pinMode(COMPRESSOR_DIR_1, OUTPUT);
 
@@ -76,7 +73,7 @@ void loop() {
 
 
   //rotateMotor(100000);
-  /*distance = getTheDistance();
+  distance = getTheDistance();
   int binFill = getBinFillLevel();  // Check fill level
 
   if (distance <= 10) {
@@ -113,12 +110,12 @@ void loop() {
 
     delay(2000);  // Wait before next detection
   }
-  */
+  
 }
 
 // Function to measure object distance
 
-/*
+
 int getTheDistance() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -153,11 +150,11 @@ void rotateMotor(int steps) {
   } 
 }
 
-*/
+
 
 // Reset classification motor
 
-/*
+
 void resetMotor(int steps) {
   digitalWrite(dirPin, LOW);
   for (int i = 0; i < steps; i++) {
@@ -169,7 +166,7 @@ void resetMotor(int steps) {
   digitalWrite(dirPin, HIGH);
 }
 
-*/
+
 
 // Activate NEMA 17 stepper motor for compression
 void activateCompressor() {
@@ -202,7 +199,7 @@ void activateCompressor() {
 }
 
 
-/*
+
 // Open platform
 void openThePlatform(int speed) {
   digitalWrite(AIN1, HIGH);
@@ -223,5 +220,66 @@ void closeThePlatform(int speed) {
   digitalWrite(BIN2, HIGH);
   analogWrite(PWMB, speed);
   Serial.println("Closing Platform...");
+}*/
+
+// For Classification Motors
+
+const int stepPin = 3;
+const int dirPin = 2;
+
+void setup() {
+  pinMode(stepPin, OUTPUT);
+  pinMode(dirPin, OUTPUT);
+  rotateMotor(stepPin, dirPin, 46250, true, 80);
+  delay(2000);
 }
-*/
+
+void loop() {
+
+  int classType = 0;
+  switch (classType) {
+    case 0:
+      rotateMotor(stepPin, dirPin, 15416, true, 80);
+      delay(2000);
+      rotateMotor(stepPin, dirPin, 15416, false, 80);
+      delay(2000);
+    break;
+    case 1:
+      rotateMotor(stepPin, dirPin, 46250, true, 80);
+      delay(2000);
+      rotateMotor(stepPin, dirPin, 46250, false, 80);
+      delay(2000);
+    break;
+    case 2:
+      rotateMotor(stepPin, dirPin, 15416, false, 80);
+      delay(2000);
+      rotateMotor(stepPin, dirPin, 15416, true, 80);
+      delay(2000);
+    break;
+    case 3:
+      rotateMotor(stepPin, dirPin, 46250, false, 80);
+      delay(5000);
+      rotateMotor(stepPin, dirPin, 46250, true, 80);
+      delay(5000);
+      break;
+    default:
+      rotateMotor(stepPin, dirPin, 0, true, 80);
+      delay(5000);
+      rotateMotor(stepPin, dirPin, 0, false, 80);
+      delay(5000);
+    break;
+  }
+
+  
+}
+
+void rotateMotor(int stepPin, int dirPin, long steps, bool dir, long motorDelay) {
+  digitalWrite(dirPin, dir);
+  for (long i = 0; i < steps; i++) {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(motorDelay);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(motorDelay);
+  } 
+}
+
