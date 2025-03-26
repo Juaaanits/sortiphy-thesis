@@ -225,9 +225,10 @@ void closeThePlatform(int speed) {
 // For Classification Motors
 
 const int stepPin = 3;
-const int dirPin = 2;
+const int dirPin = 2; 
 
 void setup() {
+  Serial.begin(9600);
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   rotateMotor(stepPin, dirPin, 46250, true, 80);
@@ -239,35 +240,20 @@ void loop() {
   int classType = 0;
   switch (classType) {
     case 0:
-      rotateMotor(stepPin, dirPin, 15416, true, 80);
-      delay(2000);
-      rotateMotor(stepPin, dirPin, 15416, false, 80);
-      delay(2000);
+      classify(15416, true);
     break;
     case 1:
-      rotateMotor(stepPin, dirPin, 46250, true, 80);
-      delay(2000);
-      rotateMotor(stepPin, dirPin, 46250, false, 80);
-      delay(2000);
+      classify(46250, true);
     break;
     case 2:
-      rotateMotor(stepPin, dirPin, 15416, false, 80);
-      delay(2000);
-      rotateMotor(stepPin, dirPin, 15416, true, 80);
-      delay(2000);
+      classify(15416, false);
     break;
     case 3:
-      rotateMotor(stepPin, dirPin, 46250, false, 80);
-      delay(5000);
-      rotateMotor(stepPin, dirPin, 46250, true, 80);
-      delay(5000);
+      classify(15416, false);
       break;
     default:
-      rotateMotor(stepPin, dirPin, 0, true, 80);
-      delay(5000);
-      rotateMotor(stepPin, dirPin, 0, false, 80);
-      delay(5000);
-    break;
+      classify(0, true);
+      break;
   }
 
   
@@ -283,3 +269,20 @@ void rotateMotor(int stepPin, int dirPin, long steps, bool dir, long motorDelay)
   } 
 }
 
+void classify(long steps, bool dir) {
+  rotateMotor(stepPin, dirPin, steps, dir, 80);
+  Serial.println("Classification Done");
+  while (!Serial.available()) {
+    
+  }
+
+  String response = Serial.readString();
+  response.trim();
+
+  if (response == "Function Executed!") {
+    Serial.println("Received acknowledgment. Continuing...");
+  }
+
+  rotateMotor(stepPin, dirPin, steps, !dir, 80);
+  delay(2000);
+}
