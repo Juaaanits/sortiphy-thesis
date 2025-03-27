@@ -231,22 +231,23 @@ void setup() {
   Serial.begin(9600);
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
-  rotateMotor(stepPin, dirPin, 46250, true, 80);
+  rotateMotor(stepPin, dirPin, 46250, true, 80); // For calibration. If sorter is in the very RIGHT. 46250 is dead center!
   delay(2000);
 }
 
 void loop() {
 
-  int classType = 0;
+  int classType = 0; // Please obtain the class type and place it here!
+
   switch (classType) {
     case 0:
-      classify(15416, true);
+      classify(15416, true); // 15416 is half way of half (X: not the belt, Y: BELT HERE IS HERE) [X][Y][X][X]
     break;
     case 1:
-      classify(46250, true);
+      classify(46250, true); // FULL LEFT (X: not the belt, Y: BELT HERE IS HERE) [Y][X]][X][X]
     break;
     case 2:
-      classify(15416, false);
+      classify(15416, false); // false is just the opposite direction
     break;
     case 3:
       classify(15416, false);
@@ -260,7 +261,7 @@ void loop() {
 }
 
 void rotateMotor(int stepPin, int dirPin, long steps, bool dir, long motorDelay) {
-  digitalWrite(dirPin, dir);
+  digitalWrite(dirPin, dir); // simple function, takes a step pin, the direction pin, how many steps, the direction, and the speed.
   for (long i = 0; i < steps; i++) {
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(motorDelay);
@@ -272,7 +273,7 @@ void rotateMotor(int stepPin, int dirPin, long steps, bool dir, long motorDelay)
 void classify(long steps, bool dir) {
   rotateMotor(stepPin, dirPin, steps, dir, 80);
   Serial.println("Classification Done");
-  while (!Serial.available()) {
+  while (!Serial.available()) { // Do nothing while waiting. If you receive "Function Executed, run the next code."
     
   }
 
@@ -283,6 +284,6 @@ void classify(long steps, bool dir) {
     Serial.println("Received acknowledgment. Continuing...");
   }
 
-  rotateMotor(stepPin, dirPin, steps, !dir, 80);
+  rotateMotor(stepPin, dirPin, steps, !dir, 80); // put it back
   delay(2000);
 }
