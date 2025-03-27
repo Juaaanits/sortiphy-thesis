@@ -27,6 +27,7 @@ void setup() {
 }
 
 void loop() {
+  /*
   if (Serial.available()) { // Checks if the serial monitor is not empty
     String command = Serial.readString();
     command.trim();
@@ -40,20 +41,19 @@ void loop() {
         Serial.println("Function Executed!");
         // Serial.flush(); readd this if there are issues with RXTX passing
     }
-  }
+  }*/
+  // dropItem();
+  compress();
 }
 
 void dropItem() {
   // Sets the Boolean of the driver motor to 10, which indicates an OPENING motion
-  digitalWrite(AIN1, HIGH);
-  digitalWrite(AIN2, LOW);
+  digitalWrite(AIN1, LOW);
+  digitalWrite(AIN2, HIGH);
 
-  for (int speed = 64; speed <= 255; speed += 10) { // Slowly increases the speed to avoid whiplash
-    analogWrite(PWMA, speed);
-    delay(50);
-  }
+  analogWrite(PWMA, 255);
 
-  delay(500);
+  delay(5000);
 
   // Sets the Boolean of the driver motor to 00, which indicates a DO NOTHING
   digitalWrite(AIN1, LOW); 
@@ -65,11 +65,11 @@ void dropItem() {
   // getFillLevel() get current fill level and update!
 
   // Sets the Boolean of the driver motor to 01, which indicates a CLOSING motion
-  digitalWrite(AIN1, LOW);
-  digitalWrite(AIN2, HIGH);
+  digitalWrite(AIN1, HIGH);
+  digitalWrite(AIN2, LOW);
   analogWrite(PWMA, 255); // This line means 100% speed.
 
-  delay(500);
+  delay(5000);
 
   digitalWrite(AIN1, LOW);
   digitalWrite(AIN2, LOW);
