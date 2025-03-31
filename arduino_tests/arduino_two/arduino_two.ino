@@ -27,7 +27,6 @@ void setup() {
 }
 
 void loop() {
-  /*
   if (Serial.available()) { // Checks if the serial monitor is not empty
     String command = Serial.readString();
     command.trim();
@@ -41,9 +40,9 @@ void loop() {
         Serial.println("Function Executed!");
         // Serial.flush(); readd this if there are issues with RXTX passing
     }
-  }*/
-  // dropItem();
-  compress();
+  }
+  //dropItem();
+  //compress();
 }
 
 void dropItem() {
