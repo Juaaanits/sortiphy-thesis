@@ -1,4 +1,4 @@
-// Pins for Trash Dispenser
+// Pins for Trash Dispenser arduino B
 #define AIN1 7 // INA1 3RD RIGHT
 #define AIN2 6 // INA2 2ND RIGHT
 #define PWMA 5 // PWMA 1ST RIGHT
@@ -12,6 +12,13 @@
 // Ultrasonic Pins
 #define TRIG_PIN 10
 #define ECHO_PIN 11
+
+float binLevel;
+
+float tolerance;
+float binHeight;
+
+
 
 void setup() {
   pinMode(AIN1, OUTPUT);
@@ -34,12 +41,21 @@ void loop() {
     if (command == "Classification Done") { 
         dropItem();
 
-        if (true) { // replace with ultrasonic fill level checker function 
+
+        if (true/*getFillLevel >= 90*/) { // replace with ultrasonic fill level checker function 
           compress();
         }
+
+        
+        
+      
         Serial.println("Function Executed!");
+        delay(1000);
+        Serial.println(getFillLevel());
         // Serial.flush(); readd this if there are issues with RXTX passing
     }
+
+    
   }
   //dropItem();
   //compress();
@@ -52,23 +68,23 @@ void dropItem() {
 
   analogWrite(PWMA, 255);
 
-  delay(5000);
+  delay(2500);
 
   // Sets the Boolean of the driver motor to 00, which indicates a DO NOTHING
   digitalWrite(AIN1, LOW); 
   digitalWrite(AIN2, LOW);
   analogWrite(PWMA, 0);
 
-  delay(5000);
+  delay(2500);
 
-  // getFillLevel() get current fill level and update!
+
 
   // Sets the Boolean of the driver motor to 01, which indicates a CLOSING motion
   digitalWrite(AIN1, HIGH);
   digitalWrite(AIN2, LOW);
   analogWrite(PWMA, 255); // This line means 100% speed.
 
-  delay(5000);
+  delay(2500);
 
   digitalWrite(AIN1, LOW);
   digitalWrite(AIN2, LOW);
@@ -88,6 +104,10 @@ void compress() {
     delayMicroseconds(20);
   }
 
+
+
+
+
   delay(2500);
 
   digitalWrite(dirPinOne, false);
@@ -101,3 +121,24 @@ void compress() {
     delayMicroseconds(20);
   }
 }
+
+int getTheDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  float duration = pulseIn(ECHO_PIN, HIGH);
+  return duration * 0.034 / 2;
+}
+
+float getFillLevel() {
+  float binFillLevel = getTheDistance();
+  float actualFillLevel = binFillLevel - tolerance;
+  float fillLevelPercentage = (actualFillLevel / binHeight) * 100;
+
+  return fillLevelPercentage;
+}
+
+
+
