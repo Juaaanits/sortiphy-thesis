@@ -57,11 +57,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <Spinner
-                android:id="@+id/bin_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
-
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2
@@ -78,7 +73,7 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/bin_page_indicator"
-                android:layout_width="36dp"
+                android:layout_width="24dp"
                 android:layout_height="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,9 +91,6 @@
                     android:layout_width="6dp"
                     android:layout_height="wrap_content" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="6dp"
-                    android:layout_height="wrap_content" />
             </com.google.android.material.tabs.TabLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -118,17 +110,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="96dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="96dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/round_button_white"
-            android:text="Close Bin" />
 
     </LinearLayout>
 

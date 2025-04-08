@@ -108,26 +108,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/type_five_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="8dp"
-                android:background="@drawable/round_button_white">
-
-                <Button
-                    android:id="@+id/type_five_button"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/round_button_white"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

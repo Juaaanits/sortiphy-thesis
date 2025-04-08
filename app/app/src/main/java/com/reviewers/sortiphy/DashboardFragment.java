@@ -27,7 +27,7 @@ public class DashboardFragment extends Fragment {
     }
 */
     private FirebaseFirestore db;
-    private static final int NUM_PAGES = 3;
+    private static final int NUM_PAGES = 2;
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
     private TabLayout tabLayout;
@@ -108,13 +108,11 @@ public class DashboardFragment extends Fragment {
                         long categoryTwo = documentSnapshot.getLong("categoryTwoCount");
                         long categoryThree = documentSnapshot.getLong("categoryThreeCount");
                         long categoryFour = documentSnapshot.getLong("categoryFourCount");
-                        long categoryFive = documentSnapshot.getLong("categoryFiveCount");
 
                         String categoryOneName = documentSnapshot.getString("categoryNameOne");
                         String categoryTwoName = documentSnapshot.getString("categoryNameTwo");
                         String categoryThreeName = documentSnapshot.getString("categoryNameThree");
                         String categoryFourName = documentSnapshot.getString("categoryNameFour");
-                        String categoryFiveName = documentSnapshot.getString("categoryNameFive");
 
                         String type = documentSnapshot.getString("type");
 
@@ -122,16 +120,14 @@ public class DashboardFragment extends Fragment {
                         TextView textTwo = stats.findViewById(R.id.type_two_button);
                         TextView textThree = stats.findViewById(R.id.type_three_button);
                         TextView textFour = stats.findViewById(R.id.type_four_button);
-                        TextView textFive = stats.findViewById(R.id.type_five_button);
                         TextView cardType = stats.findViewById(R.id.card_name);
 
-                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour + categoryFive;
+                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour;
 
                         textOne.setText(String.format("%.2f%%", (categoryOne * 100.0) / totalValue) + " " +  categoryOneName);
                         textTwo.setText(String.format("%.2f%%", (categoryTwo * 100.0) / totalValue) + " " +  categoryTwoName);
                         textThree.setText(String.format("%.2f%%", (categoryThree * 100.0) / totalValue) + " " +  categoryThreeName);
                         textFour.setText(String.format("%.2f%%", (categoryFour * 100.0) / totalValue) + " " +  categoryFourName);
-                        textFive.setText(String.format("%.2f%%", (categoryFive * 100.0) / totalValue) + " " + categoryFiveName);
 
                         cardType.setText(type + " Stats");
                     }

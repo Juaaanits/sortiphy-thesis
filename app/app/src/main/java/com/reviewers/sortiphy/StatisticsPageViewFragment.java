@@ -125,22 +125,19 @@ public class StatisticsPageViewFragment extends Fragment {
                         long categoryTwo = documentSnapshot.getLong("categoryTwoCount");
                         long categoryThree = documentSnapshot.getLong("categoryThreeCount");
                         long categoryFour = documentSnapshot.getLong("categoryFourCount");
-                        long categoryFive = documentSnapshot.getLong("categoryFiveCount");
 
-                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour + categoryFive;
+                        long totalValue = categoryOne + categoryTwo + categoryThree + categoryFour;
 
-                        setupGarbageInfo(rootView, R.id.type_one, "Paper", categoryOne, totalValue, 0, colors);
-                        setupGarbageInfo(rootView, R.id.type_two, "Plastic", categoryTwo, totalValue, 1, colors);
-                        setupGarbageInfo(rootView, R.id.type_three, "Glass", categoryThree, totalValue, 2, colors);
-                        setupGarbageInfo(rootView, R.id.type_four, "Metal", categoryFour, totalValue, 3, colors);
-                        setupGarbageInfo(rootView, R.id.type_five, "Organic", categoryFive, totalValue, 4, colors);
+                        setupGarbageInfo(rootView, R.id.type_one, "Glass", categoryOne, totalValue, 0, colors);
+                        setupGarbageInfo(rootView, R.id.type_two, "Non-Recyclable", categoryTwo, totalValue, 1, colors);
+                        setupGarbageInfo(rootView, R.id.type_three, "Paper", categoryThree, totalValue, 2, colors);
+                        setupGarbageInfo(rootView, R.id.type_four, "Recyclable", categoryFour, totalValue, 3, colors);
 
                         entries.clear();
                         entries.add(new PieEntry(categoryOne, ""));
                         entries.add(new PieEntry(categoryTwo, ""));
                         entries.add(new PieEntry(categoryThree, ""));
                         entries.add(new PieEntry(categoryFour, ""));
-                        entries.add(new PieEntry(categoryFive, ""));
 
                         PieDataSet pieDataSet = new PieDataSet(entries, "Garbage Classes");
                         pieDataSet.setColors(colors);
@@ -207,6 +204,8 @@ public class StatisticsPageViewFragment extends Fragment {
                         if (currentHour >= 0 && currentHour < 13 && currentHour % 2 == 0) {
                             dailyStats[currentHour/2]++;
                         }
+
+                        // I HAVE NO IDEA WHAT I'M DOING ANYMORE
 
                         weeklyStats[currentDayOfWeek] = dailyStats.clone();
                         monthlyStats[currentDayOfMonth] = dailyStats.clone();

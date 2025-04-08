@@ -58,9 +58,6 @@ public class DashboardPageViewFragment extends Fragment {
             case 3:
                 classOne = "trashClassificationFour";
                 break;
-            case 4:
-                classOne = "trashClassificationFive";
-                break;
             default:
                 classOne = "trashClassificationOne";
         }
@@ -76,9 +73,6 @@ public class DashboardPageViewFragment extends Fragment {
                 classTwo = "trashClassificationFour";
                 break;
             case 4:
-                classTwo = "trashClassificationFive";
-                break;
-            case 5:
                 classTwo = "trashClassificationFive";
                 break;
             default:

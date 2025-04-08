@@ -109,13 +109,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
-                    <include
-                        android:id="@+id/type_five"
-                        layout="@layout/template_information_percentage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
 
                 </LinearLayout>
 
