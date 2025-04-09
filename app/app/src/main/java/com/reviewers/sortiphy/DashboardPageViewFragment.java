@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.firebase.firestore.FirebaseFirestore;
+import android.graphics.Color;
 
 public class DashboardPageViewFragment extends Fragment {
 
@@ -97,10 +98,14 @@ public class DashboardPageViewFragment extends Fragment {
                         String binDesc = documentSnapshot.getString("className");
                         if (percentageValue > 90) {
                             fillLevelOne.setText("Replace");
+                            fillLevelOne.setTextColor(Color.RED);
                             bottomText.setText("Bag Now");
+                            bottomText.setTextColor(Color.RED);
                         } else {
                             fillLevelOne.setText(String.valueOf(percentageValue));
-                            bottomTextTwo.setText("Percent");
+                            bottomText.setText("Percent");
+                            fillLevelOne.setTextColor(Color.parseColor("#011638"));
+                            bottomText.setTextColor(Color.parseColor("#011638"));
                         }
                         binLevelOne.setText(binDesc);
                     }
@@ -117,10 +122,14 @@ public class DashboardPageViewFragment extends Fragment {
                         String binDesc = documentSnapshot.getString("className");
                         if (percentageValue > 90) {
                             fillLevelTwo.setText("Replace");
+                            fillLevelTwo.setTextColor(Color.RED);
                             bottomTextTwo.setText("Bag Now");
+                            bottomTextTwo.setTextColor(Color.RED);
                         } else {
                             fillLevelTwo.setText(String.valueOf(percentageValue));
                             bottomTextTwo.setText("Percent");
+                            fillLevelTwo.setTextColor(Color.parseColor("#011638"));
+                            bottomTextTwo.setTextColor(Color.parseColor("#011638"));
                         }
                         binLevelTwo.setText(binDesc);
                     }

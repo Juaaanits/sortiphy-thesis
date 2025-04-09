@@ -182,6 +182,8 @@ public class StatisticsPageViewFragment extends Fragment {
 
         List<Entry> lineCategoryOne = new ArrayList<>();
 
+        // This Segment needs MAJOR revision
+
         db.collection("statistics").document("dailyTrashStatistics")
                 .addSnapshotListener(((snapshot, error) -> {
                     if (error != null) {
@@ -217,12 +219,14 @@ public class StatisticsPageViewFragment extends Fragment {
                         Log.d("Firestore", "Statistics updated and saved.");
 
                         if (userId.equals("dailyTrashStatistics")) {
+                            lineCategoryOne.clear(); // Add this line
                             for (int i = 0; i < 7; i++) {
                                 float value = dailyStats[i];
                                 lineCategoryOne.add(new Entry(i, dailyStats[i]));
                             }
 
                         } else if (userId.equals("weeklyTrashStatistics")) {
+                            lineCategoryOne.clear(); // Add this line
                             for (int i = 0; i < 7; i++) {
                                 int sum = 0;
                                 for (int j = 0; j < adjustedDayOfWeek; j++) {
@@ -231,6 +235,7 @@ public class StatisticsPageViewFragment extends Fragment {
                                 lineCategoryOne.add(new Entry(i, sum / adjustedDayOfWeek));
                             }
                         }  else if (userId.equals("monthlyTrashStatistics")) {
+                            lineCategoryOne.clear(); // Add this line
                             for (int i = 0; i < 7; i++) {
                                 int sum = 0;
                                 for (int j = 0; j < calendar.get(Calendar.DAY_OF_MONTH); j++) {
@@ -246,19 +251,6 @@ public class StatisticsPageViewFragment extends Fragment {
                         lineChart.invalidate();
                     }
                 }));
-
-
-        LineDataSet dataSet1 = new LineDataSet(lineCategoryOne, "Paper");
-        dataSet1.setColor(Color.BLUE);
-
-        LineData lineData = new LineData(dataSet1);
-
-        lineCategoryOne.clear();
-
-        lineChart.setData(lineData);
-
-        lineChart.invalidate();
-
         return rootView;
     }
 
