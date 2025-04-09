@@ -40,6 +40,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.concurrent.TimeUnit;
 import android.Manifest;
@@ -70,11 +71,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
         }
 
+        FirebaseMessaging.getInstance().subscribeToTopic("allUsers")
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FCM", "Subscribed to allUsers topic");
+                    }
+                });
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //scheduleFirestoreWorkerDebug();
-        scheduleFirestoreWorker();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,10 +114,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     //.error(R.drawable.error_profile) // Optional: Error image if URL fails
                                     .into(userProfileImage);
                         } else {
-                           // userProfileImage.setImageResource(R.drawable.default_profile);
+                            // userProfileImage.setImageResource(R.drawable.default_profile);
                         }
                     }
-        });
+                });
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -128,15 +133,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() ==  R.id.nav_dashboard) {
+        if (item.getItemId() == R.id.nav_dashboard) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
-        } else if (item.getItemId() ==  R.id.nav_history) {
+        } else if (item.getItemId() == R.id.nav_history) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HistoryFragment()).commit();
-        } else if (item.getItemId() ==  R.id.nav_statistics) {
+        } else if (item.getItemId() == R.id.nav_statistics) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StatisticsFragment()).commit();
-        } else if (item.getItemId() ==  R.id.nav_settings) {
+        } else if (item.getItemId() == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit(); // no settings for now
-        } else if (item.getItemId() ==  R.id.nav_logout) {
+        } else if (item.getItemId() == R.id.nav_logout) {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove("isLoggedIn");
@@ -160,39 +165,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void scheduleFirestoreWorker() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        PeriodicWorkRequest firestoreWorkRequest = new PeriodicWorkRequest.Builder(
-                FirestoreWorker.class,
-                15,
-                TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build();
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "FirestoreWorker",
-                ExistingPeriodicWorkPolicy.KEEP,
-                firestoreWorkRequest
-        );
-    }
-
-    private void scheduleFirestoreWorkerDebug() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(FirestoreWorker.class)
-                .setConstraints(constraints)
-                .build();
-
-        WorkManager.getInstance(this).enqueueUniqueWork(
-                "FirestoreWorkerDebug",
-                ExistingWorkPolicy.REPLACE,
-                workRequest
-        );
-        new Handler(Looper.getMainLooper()).postDelayed(this::scheduleFirestoreWorkerDebug, 10000);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Log.e("Notifications", "Permission denied");
+            }
+        }
     }
 }
