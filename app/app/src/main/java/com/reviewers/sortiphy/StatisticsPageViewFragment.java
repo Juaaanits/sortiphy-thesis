@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -29,9 +27,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,8 +71,10 @@ public class StatisticsPageViewFragment extends Fragment {
         pieChart = rootView.findViewById(R.id.pie_chart);
         TextView date = rootView.findViewById(R.id.date);
 
+        Calendar calendarDisplay = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
         Calendar calendarOne = Calendar.getInstance();
+        calendarDisplay.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendarOne.setFirstDayOfWeek(Calendar.MONDAY);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
@@ -87,7 +85,7 @@ public class StatisticsPageViewFragment extends Fragment {
                 userId = "dailyTrashStatistics";
                 break;
             case 1:
-                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                calendarDisplay.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                 calendarOne.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                 date.setText(dateFormat.format(calendar.getTime()) + " - " + dateFormat.format(calendarOne.getTime()));
                 userId = "weeklyTrashStatistics";
@@ -181,10 +179,23 @@ public class StatisticsPageViewFragment extends Fragment {
         yAxis.setLabelCount(10);
 
         List<Entry> lineCategoryOne = new ArrayList<>();
+        String timeStampDocumentPath = "";
 
-        // This Segment needs MAJOR revision
+        switch (page) {
+            case 0:
+                timeStampDocumentPath = "daily";
+                break;
+            case 1:
+                timeStampDocumentPath = "weekly";
+                break;
+            case 2:
+                timeStampDocumentPath = "monthly";
+                break;
+            default:
+                timeStampDocumentPath = "daily";
+        }
 
-        db.collection("statistics").document("dailyTrashStatistics")
+        db.collection("timeStamp").document(timeStampDocumentPath)
                 .addSnapshotListener(((snapshot, error) -> {
                     if (error != null) {
                         Log.e("Firestore", "Listen Failed.", error);
@@ -193,57 +204,35 @@ public class StatisticsPageViewFragment extends Fragment {
                     if (snapshot != null && snapshot.exists()) {
                         SharedPreferences prefs = requireContext().getSharedPreferences("StatsPrefs", Context.MODE_PRIVATE);
 
-                        int adjustedDayOfWeek = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 + 1;
+                        long adjustedDayOfWeek = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 + 1;
+                        long currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);  // 0 to 29 (for 30-day month)
 
-                        int[] dailyStats = loadArrayFromPrefs(prefs, "dailyStats", 7);
-                        int[][] weeklyStats = load2DArrayFromPrefs(prefs, "weeklyStats", 7, 7);
-                        int[][] monthlyStats = load2DArrayFromPrefs(prefs, "monthlyStats", 31, 7);
+                        long divisor = 1;
 
-                        int currentHour = calendar.get(Calendar.HOUR_OF_DAY) - 6;  // 0-23
-                        int currentDayOfWeek = adjustedDayOfWeek - 1;  // 0 (Sunday) to 6 (Saturday)
-                        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH) - 1;  // 0 to 29 (for 30-day month)
-
-                        if (currentHour >= 0 && currentHour < 13 && currentHour % 2 == 0) {
-                            dailyStats[currentHour/2]++;
+                        switch (page) {
+                            case 0:
+                                divisor = 1;
+                                break;
+                            case 1:
+                                divisor = adjustedDayOfWeek;
+                                break;
+                            case 2:
+                                divisor = currentDayOfMonth;
+                                break;
+                            default:
+                                divisor = adjustedDayOfWeek;
                         }
 
-                        // I HAVE NO IDEA WHAT I'M DOING ANYMORE
+                        long sixAm = snapshot.getLong("6am");
+                        long eightAm = snapshot.getLong("8am");
+                        long tenAm = snapshot.getLong("10am");
+                        long twelvePm = snapshot.getLong("12pm");
+                        long twoPm = snapshot.getLong("2pm");
+                        long fourPm = snapshot.getLong("4pm");
+                        long sixPm = snapshot.getLong("6pm");
 
-                        weeklyStats[currentDayOfWeek] = dailyStats.clone();
-                        monthlyStats[currentDayOfMonth] = dailyStats.clone();
+                        setupLineGraph(lineCategoryOne, sixAm, eightAm, tenAm, twelvePm, twoPm, fourPm, sixPm, divisor);
 
-                        saveArrayToPrefs(prefs, "dailyStats", dailyStats);
-                        save2DArrayToPrefs(prefs, "weeklyStats", weeklyStats);
-                        save2DArrayToPrefs(prefs, "monthlyStats", monthlyStats);
-
-                        Log.d("Firestore", "Statistics updated and saved.");
-
-                        if (userId.equals("dailyTrashStatistics")) {
-                            lineCategoryOne.clear(); // Add this line
-                            for (int i = 0; i < 7; i++) {
-                                float value = dailyStats[i];
-                                lineCategoryOne.add(new Entry(i, dailyStats[i]));
-                            }
-
-                        } else if (userId.equals("weeklyTrashStatistics")) {
-                            lineCategoryOne.clear(); // Add this line
-                            for (int i = 0; i < 7; i++) {
-                                int sum = 0;
-                                for (int j = 0; j < adjustedDayOfWeek; j++) {
-                                    sum += weeklyStats[j][i];
-                                }
-                                lineCategoryOne.add(new Entry(i, sum / adjustedDayOfWeek));
-                            }
-                        }  else if (userId.equals("monthlyTrashStatistics")) {
-                            lineCategoryOne.clear(); // Add this line
-                            for (int i = 0; i < 7; i++) {
-                                int sum = 0;
-                                for (int j = 0; j < calendar.get(Calendar.DAY_OF_MONTH); j++) {
-                                    sum += monthlyStats[j][i];
-                                }
-                                lineCategoryOne.add(new Entry(i, sum / calendar.get(Calendar.DAY_OF_MONTH)));
-                            }
-                        }
                         LineDataSet dataSet1 = new LineDataSet(lineCategoryOne, "Trash");
                         dataSet1.setColor(Color.BLUE);
                         LineData lineData = new LineData(dataSet1);
@@ -252,6 +241,17 @@ public class StatisticsPageViewFragment extends Fragment {
                     }
                 }));
         return rootView;
+    }
+
+    private void setupLineGraph (List<Entry> lineCategory, long sixAm, long eightAm, long tenAm, long twelvePm, long twoPm, long fourPm, long sixPm, long divisor) {
+        lineCategory.clear();
+        lineCategory.add(new Entry(0, (sixAm/divisor)));
+        lineCategory.add(new Entry(1, (eightAm/divisor)));
+        lineCategory.add(new Entry(2, (tenAm/divisor)));
+        lineCategory.add(new Entry(3, (twelvePm/divisor)));
+        lineCategory.add(new Entry(4, (twoPm/divisor)));
+        lineCategory.add(new Entry(5, (fourPm/divisor)));
+        lineCategory.add(new Entry(6, (sixPm/divisor)));
     }
 
     private void setupGarbageInfo(View rootView, int viewId, String typeName, double categoryValue, double totalValue, int colorIndex, ArrayList<Integer> colors) {
@@ -267,40 +267,6 @@ public class StatisticsPageViewFragment extends Fragment {
             textView.setText(String.format("%.2f %%", (categoryValue * 100.0) / totalValue));
         } else {
             textView.setText("0.00 %");
-        }
-    }
-
-    private void saveArrayToPrefs(SharedPreferences prefs, String key, int[] array) {
-        Gson gson = new Gson();
-        String json = gson.toJson(array);
-        prefs.edit().putString(key, json).apply();
-    }
-
-    private int[] loadArrayFromPrefs(SharedPreferences prefs, String key, int size) {
-        Gson gson = new Gson();
-        String json = prefs.getString(key, null);
-
-        if (json != null) {
-            return gson.fromJson(json, int[].class);
-        } else {
-            return new int[size];  // Return a new array with default values if not found
-        }
-    }
-
-    private void save2DArrayToPrefs(SharedPreferences prefs, String key, int[][] array) {
-        Gson gson = new Gson();
-        String json = gson.toJson(array);
-        prefs.edit().putString(key, json).apply();
-    }
-
-    private int[][] load2DArrayFromPrefs(SharedPreferences prefs, String key, int rows, int cols) {
-        Gson gson = new Gson();
-        String json = prefs.getString(key, null);
-
-        if (json != null) {
-            return gson.fromJson(json, int[][].class);
-        } else {
-            return new int[rows][cols];  // Return a new empty 2D array if not found
         }
     }
 }
