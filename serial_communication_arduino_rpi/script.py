@@ -1,3 +1,4 @@
+
 import cv2
 import numpy as np
 import tflite_runtime.interpreter as tflite
@@ -14,7 +15,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 #Initialize serial connection to Arduino
-arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 time.sleep(3)  # Wait for Arduino to initialize
 
 #Model and labels
@@ -43,11 +44,10 @@ def get_bin_doc_name(classification_idx):
     return bin_mapping.get(classification_idx, "trashClassificationUnknown")
 
 #Capture image and classify
-def capture_and_classify():
-    #Open camera (avoid lag)
-    cam = cv2.VideoCapture(0)
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 650)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 650)
+def capture_and_classify(cam):
+    for _ in range(5):
+        cam.read()
+        time.sleep(0.05)
 
     #Capture frame
     ret, frame = cam.read()
@@ -87,7 +87,6 @@ def capture_and_classify():
     update_activity_level()
     print(f" Activity level updated to firestore")
 
-    cam.release()
     return classification_to_send
 
 def get_arduino_float():
@@ -253,16 +252,26 @@ def update_activity_level():
 #Main loop for object detection and classification
 if __name__ == "__main__":
     print(" System ready to classify and send data to Arduino & Firebase!")
-    while True:
-        if arduino.in_waiting > 0:
-            line = arduino.readline().decode('utf-8').strip()
-            print(f" Raw input from Arduino: {line}")
+    
+    #Open camera (avoid lag)
+    cam = cv2.VideoCapture(0)
+    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 650)
+    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 650)
+    
+    try:
+        while True:
+            if arduino.in_waiting > 0:
+                line = arduino.readline().decode('utf-8').strip()
+                print(f" Raw input from Arduino: {line}")
 
-            #Detect 'Detected' signal from Arduino for object capture
-            if line == 'Detected':
-                print(" Object detected! uring and classifying...")
-                capture_and_classify()
-                time.sleep(5)  # Delay to avoid frequent classification
+                if line == 'Detected':
+                    print(" Object detected! Capturing and classifying...")
+                    capture_and_classify(cam)
+                    time.sleep(5)  # Delay to avoid frequent classification
 
-        #Short delay to reduce CPU usage
-        time.sleep(0.1)
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print(" Shutting down gracefully...")
+    finally:
+        cam.release()
+        print(" Camera released.")
