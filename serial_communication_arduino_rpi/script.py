@@ -1,4 +1,3 @@
-
 import cv2
 import numpy as np
 import tflite_runtime.interpreter as tflite
@@ -15,12 +14,12 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 #Initialize serial connection to Arduino
-arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 time.sleep(3)  # Wait for Arduino to initialize
 
 #Model and labels
 MODEL_PATH = "/home/sortiphy/FinalModelXception.tflite"
-LABELS = ['glass', 'non-recyclable', 'paper', 'recyclable']
+LABELS = ['glass', 'non-recyclable(biological)', 'paper', 'recyclable(pastic/metal)']
 INPUT_SIZE = (299, 299)
 
 #Load TFLite model
@@ -46,8 +45,8 @@ def get_bin_doc_name(classification_idx):
 #Capture image and classify
 def capture_and_classify(cam):
     for _ in range(5):
-        cam.read()
-        time.sleep(0.05)
+        cam.read()  
+        time.sleep(0.05)  
 
     #Capture frame
     ret, frame = cam.read()
@@ -60,7 +59,9 @@ def capture_and_classify(cam):
     save_dir = "/home/sortiphy/captured_images/"
     os.makedirs(save_dir, exist_ok=True)
     image_path = os.path.join(save_dir, f"image_{timestamp}.jpg")
+    cv2.imwrite(image_path, frame)
     print(f" Image saved at {image_path}")
+    cv2.imwrite(image_path, frame)
 
     #Preprocess image
     img = cv2.resize(frame, INPUT_SIZE)
@@ -275,3 +276,5 @@ if __name__ == "__main__":
     finally:
         cam.release()
         print(" Camera released.")
+        
+
